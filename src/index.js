@@ -7,11 +7,16 @@ import reportWebVitals from "./reportWebVitals";
 import { Login } from "./components/Login";
 import { Signup } from "./components/Signup";
 import { Navbar } from "./components/Navbar";
+import { CreateService } from "./components/CreateService";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/services/new",
+    element: <CreateService />,
   },
   {
     path: "/login",
