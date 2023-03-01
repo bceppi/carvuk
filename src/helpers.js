@@ -2,14 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 
 export const isLogged = () => localStorage.getItem("jwt") != null;
 
-const host = "https://eckxfbfsahsawvvywczg.supabase.co";
-const publicToken =
+export const sbHost = "https://eckxfbfsahsawvvywczg.supabase.co";
+export const sbPublicToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVja3hmYmZzYWhzYXd2dnl3Y3pnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc2NzY1MTEsImV4cCI6MTk5MzI1MjUxMX0.wryMXbl0a7d8--NMx-lkwpPNainkgLtxyZNmmE_QFoo";
 
 export const handleLogin = async (email, password) => {
   try {
     // Create a single supabase client for interacting with your database
-    const supabase = createClient(host, publicToken);
+    const supabase = createClient(sbHost, sbPublicToken);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
@@ -27,7 +27,7 @@ export const handleLogin = async (email, password) => {
 export const handleSignup = async (email, password) => {
   try {
     // Create a single supabase client for interacting with your database
-    const supabase = createClient(host, publicToken);
+    const supabase = createClient(sbHost, sbPublicToken);
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
