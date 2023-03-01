@@ -1,6 +1,6 @@
 import { handleSignup } from "../helpers";
 import Auth from "./Auth";
 
-export const Login = () => {
+export const Signup = () => {
   return <Auth title="Registrarse" handleAuthSubmit={handleSignup} />;
 };
