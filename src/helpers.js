@@ -6,25 +6,25 @@ export const sbHost = "https://eckxfbfsahsawvvywczg.supabase.co";
 export const sbPublicToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVja3hmYmZzYWhzYXd2dnl3Y3pnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc2NzY1MTEsImV4cCI6MTk5MzI1MjUxMX0.wryMXbl0a7d8--NMx-lkwpPNainkgLtxyZNmmE_QFoo";
 
-export const handleLogin = async (email, password) => {
+export const handleLogin = async (email, password, setError) => {
   try {
-    // Create a single supabase client for interacting with your database
     const supabase = createClient(sbHost, sbPublicToken);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-    console.log(data);
-    console.log(error);
     if (!error) {
       loginUser(data);
+    } else {
+      setError(error.message);
+      console.log(error);
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
-export const handleSignup = async (email, password) => {
+export const handleSignup = async (email, password, setError) => {
   try {
     // Create a single supabase client for interacting with your database
     const supabase = createClient(sbHost, sbPublicToken);
@@ -36,17 +36,23 @@ export const handleSignup = async (email, password) => {
     console.log(error);
     if (!error) {
       loginUser(data);
+    } else {
+      setError(error.message);
+      console.log(error);
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
-export const logout = () => {
+export const handleLogout = async () => {
+  const supabase = createClient(sbHost, sbPublicToken);
   localStorage.removeItem("jwt");
   localStorage.removeItem("userId");
   localStorage.removeItem("email");
-  window.location = "/";
+  localStorage.removeItem("sb-eckxfbfsahsawvvywczg-auth-token");
+  const { error } = await supabase.auth.signOut();
+  if (!error) window.location = "/";
 };
 
 export const loginUser = (data) => {
