@@ -123,8 +123,12 @@ function App() {
                           role="navigation"
                           aria-label="pagination"
                         >
-                          <a class="pagination-previous">Previous</a>
-                          <a class="pagination-next">Next page</a>
+                          <a class="pagination-previous" href="#">
+                            Previous
+                          </a>
+                          <a class="pagination-next" href="#">
+                            Next page
+                          </a>
                           <ul class="pagination-list">
                             {[...Array(parseInt(servicesCount / 5) + 1)].map(
                               (e, i) => (
@@ -132,6 +136,7 @@ function App() {
                                   <a
                                     class="pagination-link"
                                     aria-label="Goto page 1"
+                                    href="#"
                                   >
                                     {i + 1}
                                   </a>
