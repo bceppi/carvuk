@@ -5,6 +5,7 @@ import { sbHost, sbPublicToken } from "../helpers";
 
 export const CreateService = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const supabase = createClient(sbHost, sbPublicToken);
   const [name, setName] = useState("");
   const [bookingTime, setBookingTime] = useState("");
@@ -13,21 +14,32 @@ export const CreateService = () => {
   const [address, setAddress] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    const { data, error } = await supabase
-      .from("car_services")
-      .insert({
-        name: name,
-        booking_time: bookingTime,
-        value: value,
-        license_plate: licensePlate,
-        address: address,
-      })
-      .select();
-    setIsLoading(false);
-    if (!error) {
-      window.location.href = "/";
+    if (isValidInput()) {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from("car_services")
+        .insert({
+          name: name,
+          booking_time: bookingTime,
+          value: value,
+          license_plate: licensePlate,
+          address: address,
+        })
+        .select();
+      setIsLoading(false);
+      if (!error) {
+        window.location.href = "/";
+      } else {
+        setErrorMsg(error.message);
+        console.log(error);
+      }
+    } else {
+      setErrorMsg("Todos los campos son obligatorios");
     }
+  };
+
+  const isValidInput = () => {
+    return name && bookingTime && value && licensePlate && address;
   };
 
   const handleChange = (e) => {
@@ -63,7 +75,7 @@ export const CreateService = () => {
             <div className="column is-6">
               <form onSubmit={handleSubmit}>
                 <div className="field">
-                  <label className="label">Nombre del servicio</label>
+                  <label className="label">Nombre del servicio*</label>
                   <div className="control">
                     <input
                       className="input"
@@ -75,7 +87,7 @@ export const CreateService = () => {
                   </div>
                 </div>
                 <div className="field">
-                  <label className="label">Fecha</label>
+                  <label className="label">Fecha*</label>
                   <div className="control">
                     <input
                       className="input"
@@ -86,7 +98,7 @@ export const CreateService = () => {
                   </div>
                 </div>
                 <div className="field">
-                  <label className="label">Valor</label>
+                  <label className="label">Valor*</label>
                   <div className="control">
                     <input
                       className="input"
@@ -98,7 +110,7 @@ export const CreateService = () => {
                   </div>
                 </div>
                 <div className="field">
-                  <label className="label">Patente</label>
+                  <label className="label">Patente*</label>
                   <div className="control">
                     <input
                       className="input"
@@ -110,7 +122,7 @@ export const CreateService = () => {
                   </div>
                 </div>
                 <div className="field">
-                  <label className="label">Dirección</label>
+                  <label className="label">Dirección*</label>
                   <div className="control">
                     <input
                       className="input"
@@ -122,7 +134,9 @@ export const CreateService = () => {
                   </div>
                 </div>
                 <div className="field">
+                  {errorMsg && <p className="help is-danger">{errorMsg}</p>}
                   <button
+                    type="submit"
                     className={`button is-primary ${
                       isLoading ? "is-loading" : ""
                     } `}
