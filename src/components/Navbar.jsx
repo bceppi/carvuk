@@ -1,12 +1,13 @@
-import { isLogged } from "../helpers";
+import { Link } from "react-router-dom";
+import { handleLogin, handleLogout, isLogged } from "../helpers";
 
 export const Navbar = () => {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item" href="https://bulma.io">
+        <a className="navbar-item" href="/">
           <img
-            src="https://bulma.io/images/bulma-logo.png"
+            src="https://www.carvuk.com/carvuk-logo.svg"
             width="112"
             height="28"
           />
@@ -35,17 +36,17 @@ export const Navbar = () => {
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              {isLogged ? (
-                <a href="/" className="button is-light">
+              {isLogged() ? (
+                <button onClick={handleLogout} className="button is-light">
                   <strong>Logout</strong>
-                </a>
+                </button>
               ) : (
                 <>
-                  <a href="/signup" className="button is-primary">
-                    <strong>Sign up</strong>
+                  <a href="/login" className="button is-primary">
+                    <strong>Login</strong>
                   </a>
-                  <a href="/login" className="button is-light">
-                    Log in
+                  <a href="/signup" className="button is-light">
+                    Sign up
                   </a>
                 </>
               )}
