@@ -37,7 +37,7 @@ function App() {
         <section>
           <h1 className="title">Servicios Carvuk</h1>
           <div className="columns">
-            <div className="column is-6">
+            <div className="column is-12">
               {!isLogged() && (
                 <div>
                   <p className="subtitle">
@@ -61,15 +61,48 @@ function App() {
                         <div className="box" key={i}>
                           <nav className="level">
                             <div className="level-left">
-                              <div className="level-item">
-                                <p className="subtitle is-5">{service.name}</p>
+                              <div className="level-item has-text-centered mr-6">
+                                <div>
+                                  <p class="heading">Nombre</p>
+                                  <p class="subtitle">{service.name}</p>
+                                </div>
+                              </div>
+                              <div className="level-item has-text-centered mr-6">
+                                <div>
+                                  <p class="heading">Fecha</p>
+                                  <p class="subtitle">
+                                    {new Date(
+                                      service.booking_time
+                                    ).toLocaleDateString("es-ES")}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="level-item has-text-centered mr-6">
+                                <div>
+                                  <p class="heading">Valor</p>
+                                  <p class="subtitle">${service.value}</p>
+                                </div>
+                              </div>
+                              <div className="level-item  has-text-centered mr-6">
+                                <div>
+                                  <p class="heading">Patente</p>
+                                  <p class="subtitle">
+                                    {service.license_plate}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="level-item has-text-centered mr-6">
+                                <div>
+                                  <p class="heading">Direccion</p>
+                                  <p class="subtitle">{service.address}</p>
+                                </div>
                               </div>
                             </div>
 
                             <div className="level-right">
                               <p className="level-item">
                                 <button
-                                  className="button"
+                                  className="button is-borderless"
                                   onClick={() => handleDelete(service.id)}
                                 >
                                   <span className="icon">
