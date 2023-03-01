@@ -1,13 +1,31 @@
 import "./App.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { sbHost, sbPublicToken } from "./helpers";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
+  const [carServices, setCarServices] = useState([]);
+  const supabase = createClient(sbHost, sbPublicToken);
+  useEffect(() => {
+    const fetchData = async () => {
+      const supabase = createClient(sbHost, sbPublicToken);
+      const { data, error } = await supabase.from("car_services").select();
+      setCarServices(data);
+    };
+    fetchData();
+  }, []);
+
+  const handleDelete = async (serviceId) => {
+    const { error } = await supabase
+      .from("car_services")
+      .delete()
+      .eq("id", serviceId);
+
+    console.log(error);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const supabase = createClient(sbHost, sbPublicToken);
     setIsLoading(true);
     const { data, error } = await supabase
       .from("car_services")
@@ -20,7 +38,7 @@ function App() {
       })
       .select();
     setIsLoading(false);
-    console.log(data);
+    setCarServices([...carServices, ...data]);
   };
   return (
     <section className="section">
@@ -87,6 +105,45 @@ function App() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h1 className="title">Servicios Carvuk</h1>
+          <div className="columns">
+            <div className="column is-6">
+              {carServices.length ? (
+                <>
+                  {carServices.map((service, i) => (
+                    <div className="box" key={i}>
+                      <nav className="level">
+                        <div className="level-left">
+                          <div className="level-item">
+                            <p className="subtitle is-5">{service.name}</p>
+                          </div>
+                        </div>
+
+                        <div className="level-right">
+                          <p className="level-item">
+                            <button
+                              className="button"
+                              onClick={() => handleDelete(service.id)}
+                            >
+                              <span className="icon">
+                                <i class="fa-solid fa-trash"></i>
+                              </span>
+                            </button>
+                          </p>
+                        </div>
+                      </nav>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p className="subtitle">
+                  Acá podrás visualizar los servicios creados.
+                </p>
+              )}
             </div>
           </div>
         </section>
