@@ -22,6 +22,7 @@ const Auth = ({ title, handleAuthSubmit }) => {
           <div className="form-container is-white">
             <form onSubmit={handleSubmit}>
               <div className="field">
+                <label className="label">Email</label>
                 <input
                   className="input"
                   name="email"
@@ -33,6 +34,7 @@ const Auth = ({ title, handleAuthSubmit }) => {
                 />
               </div>
               <div className="field">
+                <label className="label">Contraseña</label>
                 <input
                   className="input"
                   name="password"

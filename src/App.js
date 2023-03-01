@@ -1,9 +1,9 @@
 import logo from "./logo.svg";
 import "./App.scss";
-import Auth from "./components/Auth";
+import { Login } from "./components/Login";
 
 function App() {
-  return <Auth />;
+  return <Login />;
 }
 
 export default App;
