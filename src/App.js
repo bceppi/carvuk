@@ -6,6 +6,12 @@ import { sbHost, sbPublicToken } from "./helpers";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [carServices, setCarServices] = useState([]);
+  const [name, setName] = useState("");
+  const [bookingTime, setBookingTime] = useState("");
+  const [value, setValue] = useState("");
+  const [licensePlate, setLicensePlate] = useState("");
+  const [address, setAddress] = useState("");
+
   const supabase = createClient(sbHost, sbPublicToken);
   useEffect(() => {
     const fetchData = async () => {
@@ -16,13 +22,37 @@ function App() {
     fetchData();
   }, []);
 
+  const handleChange = (e) => {
+    console.log(e.target.name);
+    console.log(e.target.value);
+    switch (e.target.name) {
+      case "name":
+        setName(e.target.value);
+        break;
+      case "bookingTime":
+        setBookingTime(e.target.value);
+        break;
+      case "value":
+        setValue(e.target.value);
+        break;
+      case "licensePlate":
+        setLicensePlate(e.target.value);
+        break;
+      case "address":
+        setAddress(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleDelete = async (serviceId) => {
     const { error } = await supabase
       .from("car_services")
       .delete()
       .eq("id", serviceId);
 
-    console.log(error);
+    if (!error) window.location.reload();
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,15 +60,17 @@ function App() {
     const { data, error } = await supabase
       .from("car_services")
       .insert({
-        name: "Denmark",
-        booking_time: "2023-03-01T13:49",
-        value: "5000",
-        license_plate: "",
-        address: "",
+        name: name,
+        booking_time: bookingTime,
+        value: value,
+        license_plate: licensePlate,
+        address: address,
       })
       .select();
     setIsLoading(false);
-    setCarServices([...carServices, ...data]);
+    if (!error) {
+      setCarServices([...carServices, ...data]);
+    }
   };
   return (
     <section className="section">
@@ -56,6 +88,8 @@ function App() {
                       className="input"
                       type="input"
                       placeholder="Lavado de auto"
+                      name="name"
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -65,14 +99,21 @@ function App() {
                     <input
                       className="input"
                       type="datetime-local"
-                      onChange={(e) => console.log(e.target.value)}
+                      name="bookingTime"
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
                 <div className="field">
                   <label className="label">Valor</label>
                   <div className="control">
-                    <input className="input" type="number" placeholder="5000" />
+                    <input
+                      className="input"
+                      type="number"
+                      placeholder="5000"
+                      name="value"
+                      onChange={handleChange}
+                    />
                   </div>
                 </div>
                 <div className="field">
@@ -82,6 +123,8 @@ function App() {
                       className="input"
                       type="input"
                       placeholder="JJ SL 23"
+                      name="licensePlate"
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -92,6 +135,8 @@ function App() {
                       className="input"
                       type="input"
                       placeholder="Av. Américo Vespucio 50, Las Condes."
+                      name="address"
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -101,7 +146,7 @@ function App() {
                       isLoading ? "is-loading" : ""
                     } `}
                   >
-                    Consultar
+                    Guardar
                   </button>
                 </div>
               </form>
@@ -130,7 +175,7 @@ function App() {
                               onClick={() => handleDelete(service.id)}
                             >
                               <span className="icon">
-                                <i class="fa-solid fa-trash"></i>
+                                <i className="fa-solid fa-trash"></i>
                               </span>
                             </button>
                           </p>
