@@ -2,11 +2,13 @@ import "./App.scss";
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { isLogged, sbHost, sbPublicToken } from "./helpers";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function App() {
   const [carServices, setCarServices] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [servicesCount, setServicesCount] = useState(0);
+  const { page } = useLocation();
 
   const supabase = createClient(sbHost, sbPublicToken);
   useEffect(() => {
@@ -16,6 +18,7 @@ function App() {
       const { data, error } = await supabase.from("car_services").select();
       if (!error) {
         setCarServices(data);
+        setServicesCount(data.length);
         setIsLoading(false);
       }
     };
@@ -114,6 +117,30 @@ function App() {
                           </nav>
                         </div>
                       ))}
+                      {servicesCount > 0 && (
+                        <div
+                          class="pagination is-small mb-2"
+                          role="navigation"
+                          aria-label="pagination"
+                        >
+                          <a class="pagination-previous">Previous</a>
+                          <a class="pagination-next">Next page</a>
+                          <ul class="pagination-list">
+                            {[...Array(parseInt(servicesCount / 5) + 1)].map(
+                              (e, i) => (
+                                <li key={i}>
+                                  <a
+                                    class="pagination-link"
+                                    aria-label="Goto page 1"
+                                  >
+                                    {i + 1}
+                                  </a>
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        </div>
+                      )}
                     </>
                   )}
                   {!isLoading && !carServices.length && (
