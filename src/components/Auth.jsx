@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 
-const Auth = ({ title, handleAuthSubmit }) => {
+const Auth = ({ title, handleAuthSubmit, buttonLabel, name }) => {
+  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     if (e.target.name === "email") setEmail(e.target.value);
@@ -11,7 +13,13 @@ const Auth = ({ title, handleAuthSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleAuthSubmit(email, password);
+    if (email && password) {
+      setIsLoading(true);
+      await handleAuthSubmit(email, password, setError);
+      setIsLoading(false);
+    } else {
+      setError("Debes ingresar email y contraseña.");
+    }
   };
 
   return (
@@ -46,13 +54,21 @@ const Auth = ({ title, handleAuthSubmit }) => {
                     autoComplete="new-password"
                   />
                 </div>
+                {error && <p className="help is-danger">{error}</p>}
                 <div className="field">
-                  <button className="button is-primary mb-1" type="submit">
-                    Iniciar sesión
+                  <button
+                    className={`button is-primary mb-2 ${
+                      isLoading ? "is-loading" : ""
+                    } `}
+                    type="submit"
+                  >
+                    {buttonLabel}
                   </button>
-                  <p className="help">
-                    <a href="#">Olvidé mi contraseña</a>
-                  </p>
+                  {name === "login" && (
+                    <p className="help">
+                      <a href="#">Olvidé mi contraseña</a>
+                    </p>
+                  )}
                 </div>
               </form>
             </div>
